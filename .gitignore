@@ -1,0 +1,9 @@
+.vs
+bin
+database/*.db
+database/*.bin
+obj
+raw-exam/*
+deploy
+.vscode
+keys/prod
