@@ -8,7 +8,7 @@ using RecipeJungle.Entities;
 namespace RecipeJungle.Contexts
 {
     public class TestContext : DbContext {
-        public DbSet<TestEntity> Feedbacks { get; set; }
+        public DbSet<TestEntity> TestEntities { get; set; }
 
         public TestContext(DbContextOptions<TestContext> options)
             : base(options) {
