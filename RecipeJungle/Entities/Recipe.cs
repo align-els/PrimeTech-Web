@@ -9,7 +9,7 @@ namespace RecipeJungle.Entities {
         public int Id { get; set; }
         public string Title { get; set; } 
         public string Text { get; set; }
-        public List<Tag> Tags { get; set; }
+        public List<RecipeTag> RecipeTags { get; set; }
         public string Ingredients { get; set; }
         public List<Photo> Photos { get; set; }
         public DateTime CreatedTime { get; set; }

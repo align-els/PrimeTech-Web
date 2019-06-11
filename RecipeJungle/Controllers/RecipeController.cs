@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RecipeJungle.Entities;
+using RecipeJungle.Exceptions;
 using RecipeJungle.Services;
 using RecipeJungle.Wrappers;
 
 namespace RecipeJungle.Controllers
 {
     [Route("/api/recipe")]
-    public class RecipeController : ControllerBase
-    {
+    public class RecipeController : ControllerBase {
         private IRecipeService recipeService;
 
         public RecipeController(IRecipeService recipeService) {
@@ -20,18 +20,13 @@ namespace RecipeJungle.Controllers
 
         [HttpPost("create")]
         public IActionResult Create([FromBody] CreateRecipeRequest request) {
-            if (request.Text == null)
-                return BadRequest("text'i yaz");
-
             recipeService.CreateRecipe(request);
-            return Ok("success");
+            return ActionUtils.Success();
         }
 
         [HttpGet("list")]
         public IActionResult List() {
-            List<Recipe> res = recipeService.ListRecipes();
-
-            return Ok(res);
+            return ActionUtils.Success(recipeService.ListRecipes());
         }
     }
 }

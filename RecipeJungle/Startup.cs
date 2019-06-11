@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeJungle.Contexts;
+using RecipeJungle.Middlewares;
 using RecipeJungle.Services;
 
 namespace RecipeJungle
@@ -41,6 +42,8 @@ namespace RecipeJungle
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
+
+            app.UseMiddleware<ActionFailureHandler>();
 
             app.UseMvc(routes => {
                 routes.MapRoute("default", "{controller}/{action}");
