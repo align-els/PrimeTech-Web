@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace RecipeJungle.Entities
 {
-    public class TestEntity {
+    public class User
+    {
         public int Id { get; set; }
-        public string SomeString { get; set; }
-        public int SomeInt { get; set; }
-        public bool SomeBool { get; set; }
+
     }
 }
