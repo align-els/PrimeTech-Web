@@ -19,7 +19,7 @@ namespace RecipeJungle
         {
             services.AddMemoryCache();
 
-            services.AddDbContext<TestContext>(opt =>
+            services.AddDbContext<RecipeContext>(opt =>
                 opt.UseInMemoryDatabase("test")
             );
 
@@ -27,7 +27,7 @@ namespace RecipeJungle
             {
             });
 
-            services.AddScoped<ITestService, TestService>();
+            services.AddScoped<IRecipeService, RecipeService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

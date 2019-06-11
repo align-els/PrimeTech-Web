@@ -9,9 +9,9 @@ namespace RecipeJungle.Controllers
 {
     [Route("/api/test")]
     public class TestController : ControllerBase {
-        private readonly ITestService testService;
+        private readonly IRecipeService testService;
 
-        public TestController(ITestService testService) {
+        public TestController(IRecipeService testService) {
             this.testService = testService;
         }
 
