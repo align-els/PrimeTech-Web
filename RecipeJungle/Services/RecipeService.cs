@@ -106,5 +106,68 @@ namespace RecipeJungle.Services
                     .ThenInclude(x => x.Tag)
                 .ToList();
         }
+
+        public void UpdateRecipes(UpdateRecipeRequest request) {
+            if (request == null)
+                throw new ActionFailedException("invalid request body");
+            if (request.Id == 0)
+                throw new ActionFailedException("id cannot be empty");
+
+            if (string.IsNullOrWhiteSpace(request.Title))
+                throw new ActionFailedException("title cannot be empty");
+            if (string.IsNullOrWhiteSpace(request.Text))
+                throw new ActionFailedException("title cannot be empty");
+
+            request.Title = request.Title.Trim();
+            request.Text = request.Text.Trim();
+
+            if (request.Title.Length < 8)
+                throw new ActionFailedException("title is too short");
+            if (request.Text.Length < 20)
+                throw new ActionFailedException("recipe details is too short");
+
+            if (request.Portion <= 0)
+                throw new ActionFailedException("portion cannot be smaller than 1");
+            if (request.Portion > 20)
+                throw new ActionFailedException("portion is too large");
+
+            if (request.PrepareTime <= 0)
+                throw new ActionFailedException("prepare time cannot be smaller than 1");
+            if (request.PrepareTime > 600)
+                throw new ActionFailedException("prepare time is too large");
+
+            if (request.Ingredients == null)
+                throw new ActionFailedException("ingredients cannot be empty");
+
+            foreach (var item in request.Ingredients)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    throw new ActionFailedException("ingredient items cannot be empty");
+            }
+
+            Recipe recipe = recipeContext.Recipes.Find(request.Id);
+
+            if (recipe == null)
+                throw new ActionFailedException("invalid recipe");
+
+            if (request.Photos == null)
+                request.Photos = new List<int>();
+            if (request.Tags == null)
+                request.Tags = new List<string>();
+
+            recipe.Title =request.Title;
+            recipe.Text =request.Text;
+            recipe.Ingredients = JsonConvert.SerializeObject(request.Ingredients);
+            recipe.ModifiedTime = DateTime.Now;
+            recipe.Portion = request.Portion;
+            recipe.PrepareTime = request.PrepareTime;
+            recipe.Photos = new List<Photo>();
+            recipe.RecipeTags = new List<RecipeTag>();
+
+            //TO-DO Recipe.User
+            //TO-DO Photo ve Tag için add remove endpoint 
+
+            recipeContext.SaveChanges();
+        }
     }
 }

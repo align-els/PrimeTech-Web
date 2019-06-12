@@ -28,5 +28,11 @@ namespace RecipeJungle.Controllers
         public IActionResult List() {
             return ActionUtils.Success(recipeService.ListRecipes());
         }
+
+        [HttpPost("update")]
+        public IActionResult Update([FromBody] UpdateRecipeRequest request) {
+            recipeService.UpdateRecipes(request);
+            return ActionUtils.Success();
+        }
     }
 }

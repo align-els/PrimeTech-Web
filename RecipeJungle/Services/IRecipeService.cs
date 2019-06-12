@@ -11,5 +11,6 @@ namespace RecipeJungle.Services
     {
         void CreateRecipe(CreateRecipeRequest request);
         List<Recipe> ListRecipes();
+        void UpdateRecipes(UpdateRecipeRequest request);
     }
 }
