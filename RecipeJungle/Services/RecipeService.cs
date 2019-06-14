@@ -145,7 +145,7 @@ namespace RecipeJungle.Services
                     throw new ActionFailedException("ingredient items cannot be empty");
             }
 
-            Recipe recipe = recipeContext.Recipes.Find(request.Id);
+            Recipe recipe = recipeContext.Recipes.Include(x=>x.RecipeTags).Include(x=>x.Photos).FirstOrDefault(x => x.Id == request.Id);
 
             if (recipe == null)
                 throw new ActionFailedException("invalid recipe");
@@ -155,6 +155,9 @@ namespace RecipeJungle.Services
             if (request.Tags == null)
                 request.Tags = new List<string>();
 
+            recipe.RecipeTags.Clear();
+            recipe.Photos.Clear();
+
             recipe.Title =request.Title;
             recipe.Text =request.Text;
             recipe.Ingredients = JsonConvert.SerializeObject(request.Ingredients);
@@ -163,6 +166,36 @@ namespace RecipeJungle.Services
             recipe.PrepareTime = request.PrepareTime;
             recipe.Photos = new List<Photo>();
             recipe.RecipeTags = new List<RecipeTag>();
+
+            foreach (var item in request.Photos)
+            {
+                Photo photo = recipeContext.Photos.Find(item);
+                if (photo == null)
+                    throw new ActionFailedException("photo not found");
+                recipe.Photos.Add(photo);
+            }
+
+            foreach (var item in request.Tags)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    throw new ActionFailedException("tags cannot be empty");
+
+                var tagText = item.ToLower();
+                Tag tag = recipeContext.Tags.FirstOrDefault(x => x.Text == tagText);
+                if (tag == null)
+                {
+                    tag = new Tag();
+                    tag.Text = tagText;
+                    recipeContext.Tags.Add(tag);
+                }
+
+                recipe.RecipeTags.Add(new RecipeTag
+                {
+                    Recipe = recipe,
+                    Tag = tag
+                });
+            }
+
 
             //TO-DO Recipe.User
             //TO-DO Photo ve Tag için add remove endpoint 
