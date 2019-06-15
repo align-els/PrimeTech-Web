@@ -23,7 +23,7 @@ namespace RecipeJungle.Contexts
             mb.Entity<RecipeTag>().HasKey(x => new { x.RecipeId, x.TagId });
 
             mb.Entity<Tag>().HasIndex(x => x.Text).IsUnique();
-            
+
             mb.Entity<Recipe>().HasOne(x => x.User).WithMany(x => x.RecipesOfUser);
         }
 
