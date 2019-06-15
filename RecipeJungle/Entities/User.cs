@@ -9,7 +9,7 @@ namespace RecipeJungle.Entities{
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public List<Recipe> RecipesOfUser { get; set; }
-        public List<Recipe> LikedRecipesOfUser { get; set; }
+        public List<UserRecipe> RecipesOfUser { get; set; }
+        public List<UserRecipe> LikedRecipesOfUser { get; set; }
     }
 }
