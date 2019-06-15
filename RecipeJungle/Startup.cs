@@ -87,7 +87,6 @@ namespace RecipeJungle
 
             app.UseAuthentication();
 
-            app.UseMvc();
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else {
