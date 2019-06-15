@@ -11,5 +11,6 @@ namespace RecipeJungle.Services
         List<Recipe> ListWithLabels(int id);
         List<Recipe> ListRecipes();
         void UpdateRecipes(UpdateRecipeRequest request);
+        void LikeRecipe(int id, User user);
     }
 }
