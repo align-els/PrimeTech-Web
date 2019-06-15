@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace RecipeJungle.Services
             this.recipeContext = recipeContext;
         }
 
-        public void CreateRecipe(CreateRecipeRequest request) {
+        public void CreateRecipe(CreateRecipeRequest request, User user) {
             if (request == null)
                 throw new ActionFailedException("invalid request body");
             if (string.IsNullOrWhiteSpace(request.Title))
@@ -66,7 +66,7 @@ namespace RecipeJungle.Services
             recipe.ModifiedTime = DateTime.Now;
             recipe.Portion = request.Portion;
             recipe.PrepareTime = request.PrepareTime;
-            recipe.User = null; // TODO
+            recipe.User = user; //null basıyorr? ama bence diil
             recipe.Photos = new List<Photo>();
             recipe.RecipeTags = new List<RecipeTag>();
 
@@ -86,6 +86,7 @@ namespace RecipeJungle.Services
                 if (tag == null) {
                     tag = new Tag();
                     tag.Text = tagText;
+                    //tag ın recipetags diye bi instanceı var onu yapmamaısız ama gerek var mı zaten
                     recipeContext.Tags.Add(tag);
                 }
 
@@ -145,7 +146,7 @@ namespace RecipeJungle.Services
                     throw new ActionFailedException("ingredient items cannot be empty");
             }
 
-            Recipe recipe = recipeContext.Recipes.Find(request.Id);
+            Recipe recipe = recipeContext.Recipes.Include(x=>x.RecipeTags).Include(x=>x.Photos).FirstOrDefault(x => x.Id == request.Id);
 
             if (recipe == null)
                 throw new ActionFailedException("invalid recipe");
@@ -154,6 +155,9 @@ namespace RecipeJungle.Services
                 request.Photos = new List<int>();
             if (request.Tags == null)
                 request.Tags = new List<string>();
+
+            recipe.RecipeTags.Clear();
+            recipe.Photos.Clear();
 
             recipe.Title =request.Title;
             recipe.Text =request.Text;
@@ -164,10 +168,81 @@ namespace RecipeJungle.Services
             recipe.Photos = new List<Photo>();
             recipe.RecipeTags = new List<RecipeTag>();
 
+            foreach (var item in request.Photos)
+            {
+                Photo photo = recipeContext.Photos.Find(item);
+                if (photo == null)
+                    throw new ActionFailedException("photo not found");
+                recipe.Photos.Add(photo);
+            }
+
+            foreach (var item in request.Tags)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    throw new ActionFailedException("tags cannot be empty");
+
+                var tagText = item.ToLower();
+                Tag tag = recipeContext.Tags.FirstOrDefault(x => x.Text == tagText);
+                if (tag == null)
+                {
+                    tag = new Tag();
+                    tag.Text = tagText;
+                    recipeContext.Tags.Add(tag);
+                }
+
+                recipe.RecipeTags.Add(new RecipeTag
+                {
+                    Recipe = recipe,
+                    Tag = tag
+                });
+            }
+
+
             //TO-DO Recipe.User
             //TO-DO Photo ve Tag için add remove endpoint 
 
             recipeContext.SaveChanges();
         }
+        
+        public void DeleteRecipe(int id,User user)
+        {
+            var recipe = recipeContext.Recipes.FirstOrDefault(x => x.User == user && x.Id == id);
+            if (recipe == null)
+            {
+                throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
+            }
+            recipeContext.Recipes.Remove(recipe);
+
+            if(recipe.RecipeTags != null)
+            {
+                //TODO
+                //List<Tag> tags = recipe.RecipeTags.Select(x => x.Tag).ToList();
+                //List<Tags> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y => y.Tag == tag && y.Recipe!=recipe)).Select(x => x.Recipe).ToList();
+
+            }
+            if(recipe.Photos != null)
+            {
+                recipeContext.Photos.RemoveRange(recipe.Photos);
+            }
+            recipeContext.SaveChanges();
+        }
+
+        public List<Recipe> ListWithLabels(int id)
+        {
+            Tag tag = recipeContext.Tags.Find(id);
+            if(tag == null)
+            {
+                throw new ActionFailedException("Tag is not found");
+            }
+            List<Recipe> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y=> y.Tag == tag)).Select(x=>x.Recipe).ToList();
+
+            if(recipes == null)
+            {
+                throw new ActionFailedException("No such a recipe!"); //buna gerek kalmayabilir 
+            }
+
+            return recipes;
+        }
+        
     }
 }
