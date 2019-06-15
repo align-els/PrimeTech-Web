@@ -62,5 +62,11 @@ namespace RecipeJungle.Controllers
             userService.Delete(user);
             return ActionUtils.Success();
         }
+
+        [HttpGet("list")]
+        public IActionResult ListMyRecipes([FromHeader] User user)
+        {
+            return ActionUtils.Success(userService.ListMyRecipes(user));
+        }
     }
 }
