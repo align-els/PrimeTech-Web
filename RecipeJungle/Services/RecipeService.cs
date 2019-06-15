@@ -257,6 +257,13 @@ namespace RecipeJungle.Services
 
 
         }
+        public List<Recipe> GlobalSearch(string query){
+            var recipes = recipeContext.Recipes.Where(x => x.Text.Contains(query) || x.Title.Contains(query)).ToList();
+            if (recipes.Capacity == 0){
+                throw new ActionFailedException("No such recipe");
+            }
+            return recipes;
+        }
 
 
 

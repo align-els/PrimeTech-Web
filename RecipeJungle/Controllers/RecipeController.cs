@@ -52,6 +52,11 @@ namespace RecipeJungle.Controllers
             recipeService.LikeRecipe(id, user);
             return ActionUtils.Success();
         }
+        [HttpGet("search")] 
+        public IActionResult GlobalSearch(string query)
+        {
+            return ActionUtils.Success(recipeService.GlobalSearch(query));
+        }
 
 
 
