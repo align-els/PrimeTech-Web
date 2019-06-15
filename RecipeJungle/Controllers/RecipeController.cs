@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecipeJungle.Entities;
-using RecipeJungle.Exceptions;
+using RecipeJungle.Filters;
 using RecipeJungle.Services;
 using RecipeJungle.Wrappers;
 
 namespace RecipeJungle.Controllers
 {
+    [Authorize]
+    [UserFilter]
     [Route("/api/recipe")]
     public class RecipeController : ControllerBase {
         private IRecipeService recipeService;
@@ -19,8 +18,8 @@ namespace RecipeJungle.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create([FromBody] CreateRecipeRequest request) {
-            recipeService.CreateRecipe(request);
+        public IActionResult Create([FromBody] CreateRecipeRequest request,[FromHeader] User user) {
+            recipeService.CreateRecipe(request,user);
             return ActionUtils.Success();
         }
 
@@ -30,9 +29,22 @@ namespace RecipeJungle.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update([FromBody] UpdateRecipeRequest request) {
+        public IActionResult Update([FromBody] UpdateRecipeRequest request,[FromHeader] User user) {
             recipeService.UpdateRecipes(request);
             return ActionUtils.Success();
+        }
+        
+        [HttpDelete("delete")]
+        public IActionResult Delete(int id, User user)
+        {
+            recipeService.DeleteRecipe(id,user);
+            return ActionUtils.Success();
+        }
+
+        [HttpGet("listWithLabels")] //bunun yeri burası mı ki 
+        public IActionResult ListWithLabels(int id)
+        {
+            return ActionUtils.Success(recipeService.ListWithLabels(id));
         }
     }
 }
