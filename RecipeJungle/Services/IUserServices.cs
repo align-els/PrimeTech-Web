@@ -12,5 +12,6 @@ namespace RecipeJungle.Services
         void Delete(User user);
         User FindByUserName(string username);
         User UpdateUser(CreateUserRequest request,User user);
+        List<Recipe> ListMyRecipes(User user);
     }
 }

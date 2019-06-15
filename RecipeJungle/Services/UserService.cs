@@ -11,6 +11,7 @@ using RecipeJungle.Helpers;
 using RecipeJungle.Contexts;
 using RecipeJungle.Wrappers;
 using RecipeJungle.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace RecipeJungle.Services
 {
@@ -177,6 +178,14 @@ namespace RecipeJungle.Services
             return true;
         }
 
-       
+        public List<Recipe> ListMyRecipes(User user)
+        {
+            return userContext.Recipes
+                 .Include(x => x.Photos)
+                 .Include(x => x.RecipeTags)
+                     .ThenInclude(x => x.Tag)
+                 .Where(x=>x.User.Id==user.Id).ToList();
+            //Or return user.RecipesOfUser();
+        }
     }
 }
