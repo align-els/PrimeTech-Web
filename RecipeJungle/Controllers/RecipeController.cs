@@ -13,11 +13,9 @@ namespace RecipeJungle.Controllers
     [Route("/api/recipe")]
     public class RecipeController : ControllerBase {
         private IRecipeService recipeService;
-        private RecipeContext recipeContext;
 
-        public RecipeController(IRecipeService recipeService,RecipeContext recipeContext) {
+        public RecipeController(IRecipeService recipeService) {
             this.recipeService = recipeService;
-            this.recipeContext = recipeContext;
         }
 
         [HttpPost("create")]
@@ -41,10 +39,10 @@ namespace RecipeJungle.Controllers
         public IActionResult Delete(int id, User user)
         {
             recipeService.DeleteRecipe(id,user);
-            return ActionUtils.Success(recipeContext.Tags);
+            return ActionUtils.Success();
         }
 
-        [HttpGet("listWithLabels")] //bunun yeri burası mı ki 
+        [HttpGet("listWithLabels")] 
         public IActionResult ListWithLabels(int id)
         {
             return ActionUtils.Success(recipeService.ListWithLabels(id));

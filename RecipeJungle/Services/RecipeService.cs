@@ -66,7 +66,7 @@ namespace RecipeJungle.Services
             recipe.ModifiedTime = DateTime.Now;
             recipe.Portion = request.Portion;
             recipe.PrepareTime = request.PrepareTime;
-            recipe.User = user; //null basıyorr? ama bence diil
+            recipe.User = user; 
             recipe.Photos = new List<Photo>();
             recipe.RecipeTags = new List<RecipeTag>();
 
@@ -86,7 +86,6 @@ namespace RecipeJungle.Services
                 if (tag == null) {
                     tag = new Tag();
                     tag.Text = tagText;
-                    //tag ın recipetags diye bi instanceı var onu yapmamaısız ama gerek var mı zaten
                     recipeContext.Tags.Add(tag);
                 }
 
@@ -246,7 +245,6 @@ namespace RecipeJungle.Services
             {
                 throw new ActionFailedException("No such a recipe!"); //buna gerek kalmayabilir 
             }
-
             return recipes;
         }
 
