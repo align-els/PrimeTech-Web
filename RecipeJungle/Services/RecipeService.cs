@@ -262,7 +262,17 @@ namespace RecipeJungle.Services
             return recipes;
         }
 
+        public Recipe GetReceiveById(int id)
+        {
+            var recipe = recipeContext.Recipes.Find(id);
+            if (recipe == null)
+            {
+                throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
+            }
+            return recipe;
+        }
+
 
 
     }
-}
+} 
