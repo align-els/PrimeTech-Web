@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecipeJungle.Contexts;
 using RecipeJungle.Entities;
 using RecipeJungle.Filters;
 using RecipeJungle.Services;
@@ -12,9 +13,11 @@ namespace RecipeJungle.Controllers
     [Route("/api/recipe")]
     public class RecipeController : ControllerBase {
         private IRecipeService recipeService;
+        private RecipeContext recipeContext;
 
-        public RecipeController(IRecipeService recipeService) {
+        public RecipeController(IRecipeService recipeService,RecipeContext recipeContext) {
             this.recipeService = recipeService;
+            this.recipeContext = recipeContext;
         }
 
         [HttpPost("create")]
@@ -38,7 +41,7 @@ namespace RecipeJungle.Controllers
         public IActionResult Delete(int id, User user)
         {
             recipeService.DeleteRecipe(id,user);
-            return ActionUtils.Success();
+            return ActionUtils.Success(recipeContext.Tags);
         }
 
         [HttpGet("listWithLabels")] //bunun yeri burası mı ki 

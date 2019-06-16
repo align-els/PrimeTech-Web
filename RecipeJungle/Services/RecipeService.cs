@@ -206,24 +206,30 @@ namespace RecipeJungle.Services
         
         public void DeleteRecipe(int id,User user)
         {
-            var recipe = recipeContext.Recipes.FirstOrDefault(x => x.User == user && x.Id == id);
+            var recipe = recipeContext.Recipes.Include(x => x.Photos).Include(x => x.RecipeTags).ThenInclude(x => x.Tag).FirstOrDefault(x => x.User == user && x.Id == id);
             if (recipe == null)
             {
                 throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
             }
-            recipeContext.Recipes.Remove(recipe);
 
-            if(recipe.RecipeTags != null)
+            if (recipe.RecipeTags.Count != 0 )
             {
-                //TODO
-                //List<Tag> tags = recipe.RecipeTags.Select(x => x.Tag).ToList();
-                //List<Tags> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y => y.Tag == tag && y.Recipe!=recipe)).Select(x => x.Recipe).ToList();
+
+                List<Tag> tags = recipe.RecipeTags.Select(x => x.Tag).ToList();
+                 foreach (Tag tag in tags)
+                {
+                    List<Recipe> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y => y.Tag == tag && y.Recipe != recipe)).Where(x => x != null).Select(x => x.Recipe).ToList();
+                    Console.WriteLine(recipes.Count);
+                    if (recipes.Count == 0)
+                        recipeContext.Tags.Remove(tag);
+                } 
 
             }
-            if(recipe.Photos != null)
+            if (recipe.Photos.Count != 0)
             {
                 recipeContext.Photos.RemoveRange(recipe.Photos);
             }
+            recipeContext.Recipes.Remove(recipe);
             recipeContext.SaveChanges();
         }
 
@@ -234,9 +240,9 @@ namespace RecipeJungle.Services
             {
                 throw new ActionFailedException("Tag is not found");
             }
-            List<Recipe> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y=> y.Tag == tag)).Select(x=>x.Recipe).ToList();
-
-            if(recipes == null)
+            List<Recipe> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y=> y.Tag == tag)).Where(x => x!=null).Select(x=>x.Recipe).ToList();
+            Console.WriteLine(recipes.Count);
+            if (recipes == null)
             {
                 throw new ActionFailedException("No such a recipe!"); //buna gerek kalmayabilir 
             }
