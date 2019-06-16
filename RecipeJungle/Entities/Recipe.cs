@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace RecipeJungle.Entities {
     public class Recipe {
@@ -17,6 +18,8 @@ namespace RecipeJungle.Entities {
         public DateTime ModifiedTime { get; set; }
         public int PrepareTime { get; set; }
         public int Portion { get; set; }
+
+        [JsonIgnore]
         public User User { get; set; }
     }
 }
