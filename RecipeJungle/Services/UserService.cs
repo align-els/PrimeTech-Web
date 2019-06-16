@@ -185,7 +185,6 @@ namespace RecipeJungle.Services
                  .Include(x => x.RecipeTags)
                      .ThenInclude(x => x.Tag)
                  .Where(x=>x.User.Id==user.Id).ToList();
-            //Or return user.RecipesOfUser();
         }
     }
 }
