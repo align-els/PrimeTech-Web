@@ -87,7 +87,7 @@ namespace RecipeJungle.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.Id = 0;
-            user.RecipesOfUser = new List<UserRecipe>();
+            user.RecipesOfUser = new List<Recipe>();
             user.LikedRecipesOfUser = new List<UserRecipe>();
 
             userContext.Users.Add(user);

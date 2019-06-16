@@ -24,7 +24,9 @@ namespace RecipeJungle.Contexts
 
             mb.Entity<Tag>().HasIndex(x => x.Text).IsUnique();
 
-            mb.Entity<UserRecipe>().HasOne(x => x.User).WithMany(x => x.RecipesOfUser);
+
+            mb.Entity<UserRecipe>().HasKey(x => new { x.RecipeId, x.UserId });
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
