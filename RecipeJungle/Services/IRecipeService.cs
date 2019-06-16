@@ -13,5 +13,6 @@ namespace RecipeJungle.Services
         void UpdateRecipes(UpdateRecipeRequest request);
         void LikeRecipe(int id, User user);
         List<Recipe> GlobalSearch(string query);
+        Recipe GetReceiveById(int id);
     }
 }

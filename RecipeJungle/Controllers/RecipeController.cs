@@ -53,12 +53,14 @@ namespace RecipeJungle.Controllers
             return ActionUtils.Success();
         }
         [HttpGet("search")] 
-        public IActionResult GlobalSearch(string query)
+        public IActionResult Search(string query)
         {
             return ActionUtils.Success(recipeService.GlobalSearch(query));
         }
-
-
-
+        [HttpGet("get")]
+        public IActionResult GetRecipe(int id)
+        {
+            return ActionUtils.Success(recipeService.GetReceiveById(id));
+        }
     }
 }
