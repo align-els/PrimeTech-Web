@@ -243,6 +243,26 @@ namespace RecipeJungle.Services
 
             return recipes;
         }
-        
+
+        public void LikeRecipe(int id, User user)
+        {
+            var recipe = recipeContext.Recipes.Find(id);
+            if (recipe == null)
+            {
+                throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
+            }
+            UserRecipe ur = new UserRecipe { Recipe = recipe, User = user };
+            user.LikedRecipesOfUser.Add(ur);
+            recipeContext.SaveChanges();
+
+
+        }
+        public List<Recipe> GlobalSearch(string query){
+            var recipes = recipeContext.Recipes.Where(x => x.Text.Contains(query) || x.Title.Contains(query)).ToList();
+            return recipes;
+        }
+
+
+
     }
 }

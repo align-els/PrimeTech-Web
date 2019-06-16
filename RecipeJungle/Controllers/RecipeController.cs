@@ -46,5 +46,19 @@ namespace RecipeJungle.Controllers
         {
             return ActionUtils.Success(recipeService.ListWithLabels(id));
         }
+        [HttpPost("like")]
+        public IActionResult Like(int id, [FromHeader] User user)
+        {
+            recipeService.LikeRecipe(id, user);
+            return ActionUtils.Success();
+        }
+        [HttpGet("search")] 
+        public IActionResult GlobalSearch(string query)
+        {
+            return ActionUtils.Success(recipeService.GlobalSearch(query));
+        }
+
+
+
     }
 }
