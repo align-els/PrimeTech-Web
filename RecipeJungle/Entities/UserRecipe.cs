@@ -9,7 +9,6 @@ namespace RecipeJungle.Entities
 {
     public class UserRecipe
     {
-
         [JsonIgnore]
         public int RecipeId { get; set; }
 

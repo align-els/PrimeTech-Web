@@ -21,10 +21,11 @@ namespace RecipeJungle.Contexts
 
         protected override void OnModelCreating(ModelBuilder mb) {
             mb.Entity<RecipeTag>().HasKey(x => new { x.RecipeId, x.TagId });
+            mb.Entity<UserRecipe>().HasKey(x => new { x.RecipeId, x.UserId });
 
             mb.Entity<Tag>().HasIndex(x => x.Text).IsUnique();
 
-            mb.Entity<UserRecipe>().HasOne(x => x.User).WithMany(x => x.RecipesOfUser);
+            mb.Entity<Recipe>().HasOne(x => x.User).WithMany(x => x.RecipesOfUser);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
