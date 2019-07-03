@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RecipeJungle.Pages
 {
-    public class IndexModel : RecipePageModel
+    public class HomeModel : RecipePageModel
     {
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            return Redirect("/home");
         }
     }
 }
