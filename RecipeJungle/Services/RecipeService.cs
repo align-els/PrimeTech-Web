@@ -46,22 +46,25 @@ namespace RecipeJungle.Services
 
             if (request.Ingredients == null)
                 request.Ingredients = new string[0];
+            if (request.Steps == null)
+                request.Steps = new string[0];
 
-            foreach (var item in request.Ingredients) {
+            foreach (var item in request.Steps) {
                 if (string.IsNullOrWhiteSpace(item))
-                    throw new ActionFailedException("ingredient items cannot be empty");
+                    throw new ActionFailedException("step items cannot be empty");
             }
 
             if (request.Photos == null)
                 request.Photos = new List<int>();
             if (request.Tags == null)
-                request.Tags = new List<string>();
+                request.Tags = new string[0];
 
             Recipe recipe = new Recipe();
             recipe.Id = 0;
             recipe.Title = request.Title;
             recipe.Text = request.Text;
             recipe.Ingredients = JsonConvert.SerializeObject(request.Ingredients);
+            recipe.Steps = JsonConvert.SerializeObject(request.Steps);
             recipe.CreatedTime = DateTime.Now;
             recipe.ModifiedTime = DateTime.Now;
             recipe.Portion = request.Portion;
@@ -139,10 +142,17 @@ namespace RecipeJungle.Services
             if (request.Ingredients == null)
                 throw new ActionFailedException("ingredients cannot be empty");
 
-            foreach (var item in request.Ingredients)
-            {
+            if (request.Steps == null)
+                throw new ActionFailedException("steps cannot be empty");
+
+            foreach (var item in request.Ingredients) {
                 if (string.IsNullOrWhiteSpace(item))
                     throw new ActionFailedException("ingredient items cannot be empty");
+            }
+
+            foreach (var item in request.Steps) {
+                if (string.IsNullOrWhiteSpace(item))
+                    throw new ActionFailedException("step items cannot be empty");
             }
 
             Recipe recipe = recipeContext.Recipes.Include(x=>x.RecipeTags).Include(x=>x.Photos).FirstOrDefault(x => x.Id == request.Id);
@@ -151,9 +161,9 @@ namespace RecipeJungle.Services
                 throw new ActionFailedException("invalid recipe");
 
             if (request.Photos == null)
-                request.Photos = new List<int>();
+                request.Photos = new int[0];
             if (request.Tags == null)
-                request.Tags = new List<string>();
+                request.Tags = new string[0];
 
             recipe.RecipeTags.Clear();
             recipe.Photos.Clear();
@@ -161,6 +171,7 @@ namespace RecipeJungle.Services
             recipe.Title =request.Title;
             recipe.Text =request.Text;
             recipe.Ingredients = JsonConvert.SerializeObject(request.Ingredients);
+            recipe.Steps = JsonConvert.SerializeObject(request.Steps);
             recipe.ModifiedTime = DateTime.Now;
             recipe.Portion = request.Portion;
             recipe.PrepareTime = request.PrepareTime;
@@ -203,7 +214,7 @@ namespace RecipeJungle.Services
             recipeContext.SaveChanges();
         }
         
-        public void DeleteRecipe(int id,User user)
+        public void DeleteRecipe(int id, User user)
         {
             var recipe = recipeContext.Recipes.Include(x => x.Photos).Include(x => x.RecipeTags).ThenInclude(x => x.Tag).FirstOrDefault(x => x.User == user && x.Id == id);
             if (recipe == null)
@@ -215,13 +226,15 @@ namespace RecipeJungle.Services
             {
 
                 List<Tag> tags = recipe.RecipeTags.Select(x => x.Tag).ToList();
-                 foreach (Tag tag in tags)
+
+                foreach (Tag tag in tags)
                 {
                     List<Recipe> recipes = recipeContext.Recipes.Select(x => x.RecipeTags.SingleOrDefault(y => y.Tag == tag && y.Recipe != recipe)).Where(x => x != null).Select(x => x.Recipe).ToList();
                     Console.WriteLine(recipes.Count);
                     if (recipes.Count == 0)
                         recipeContext.Tags.Remove(tag);
-                } 
+                }
+
 
             }
             if (recipe.Photos.Count != 0)
