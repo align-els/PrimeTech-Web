@@ -4,51 +4,7 @@
     "href": "/home"
   },
   {
-    "text": "Pages",
-    "href": "#",
-    "items": [
-      {
-        "text": "Home1",
-        "href": "/home"
-      },
-      {
-        "text": "Home",
-        "href": "/home",
-        "items": [
-          {
-            "text": "Home",
-            "href": "/home"
-          },
-          {
-            "text": "Home",
-            "href": "/home"
-          },
-          {
-            "text": "Home",
-            "href": "/home"
-          }
-        ]
-      },
-      {
-        "text": "Home",
-        "href": "/home"
-      }
-    ]
-  },
-  {
-    "text": "Pages1",
-    "href": "/home"
-  },
-  {
-    "text": "Pages2",
-    "href": "/home"
-  },
-  {
-    "text": "Pages3",
-    "href": "/home"
-  },
-  {
-    "text": "Pages4",
-    "href": "/home"
+    "text": "Create Recipe",
+    "href": "/createRecipe"
   }
 ]
