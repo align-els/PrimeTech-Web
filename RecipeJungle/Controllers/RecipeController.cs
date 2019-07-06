@@ -41,7 +41,7 @@ namespace RecipeJungle.Controllers
             return ActionUtils.Success();
         }
 
-        [HttpGet("listWithLabels")] //bunun yeri burası mı ki 
+        [HttpGet("listWithLabels")] 
         public IActionResult ListWithLabels(int id)
         {
             return ActionUtils.Success(recipeService.ListWithLabels(id));
