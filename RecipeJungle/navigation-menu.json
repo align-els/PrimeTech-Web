@@ -1,0 +1,14 @@
+﻿[
+  {
+    "text": "Home",
+    "href": "/home"
+  },
+  {
+    "text": "Create Recipe",
+    "href": "/createRecipe"
+  },
+  {
+    "text": "My Recipes",
+    "href": "/myRecipes"
+  }
+]

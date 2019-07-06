@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecipeJungle.Contexts;
 using RecipeJungle.Entities;
 using RecipeJungle.Filters;
 using RecipeJungle.Services;

@@ -1,0 +1,144 @@
+﻿@page
+@model RecipeJungle.Pages.CreateRecipeModel
+@{
+    Model.ActiveNavigation = "Create Recipe";
+    Layout = "Core/Layout";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <form>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input id="inputTitle" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="inputDes" class="form-control" cols="30" rows="2" placeholder=""></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Portion</label>
+                    <input id="inputPor" type="number" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>Prepare Time (min)</label>
+                    <input id="inputPre" type="number" class="form-control" placeholder="">
+                </div>
+                <div id="stepContainer" class="form-group">
+                    <label>Steps</label>
+                </div>
+                <div id="ingredientContainer" class="form-group">
+                    <label>Ingredients</label>
+                </div>
+                <div id="tagsContainer" class="form-group">
+                    <label>Tags</label>
+                </div>
+                <div id="photosContainer" class="form-group">
+                    <label>Photos</label>
+                    <input class="form-control" multiple="multiple" type="file" accept="image/x-png,image/gif,image/jpeg">
+                </div>
+
+                <button type="button" onclick="buttonClicked()" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var endlessStepContext = {
+        count: 0,
+        array: [],
+        container: document.getElementById("stepContainer")
+    };
+
+    var endlessIngredientContext = {
+        count: 0,
+        array: [],
+        container: document.getElementById("ingredientContainer")
+    };
+
+    var endlessTagsContext = {
+        count: 0,
+        array: [],
+        container: document.getElementById("tagsContainer")
+    };
+
+    function addEndlessElement(context) {
+        let newElement = document.createElement("input");
+        newElement.setAttribute("class", "form-control");
+        newElement.setAttribute("data-index", context.count);
+        context.array[context.count++] = newElement;
+        context.container.appendChild(newElement);
+        newElement.addEventListener("input", function (e) {
+            let currentText = e.target.value;
+            if (currentText.length == 0) {
+                performCollapse(context);
+                return;
+            }
+            let currentIndex = parseInt(e.target.getAttribute("data-index"));
+            if (context.count - 1 == currentIndex)
+                addEndlessElement(context);
+        });
+    }
+
+    function performCollapse(context) {
+        let empty = [];
+        let nonEmpty = [];
+        for (let x in context.array) {
+            if (x == context.count - 1)
+                continue;
+            let element = context.array[x];
+            if (element.value.length == 0)
+                empty.push(element);
+            else
+                nonEmpty.push(element);
+        }
+
+        if (empty.length == 0) return;
+
+        for (let x in empty) {
+            context.container.removeChild(empty[x]);
+            context.array = context.array.filter(function (item) {
+                return item !== empty[x];
+            })
+            context.count = context.array.length;
+        }
+
+        for (let x in nonEmpty)
+            nonEmpty[x].setAttribute("data-index", x);
+        context.array[context.count - 1].setAttribute("data-index", context.count - 1);
+    }
+
+    addEndlessElement(endlessStepContext);
+    addEndlessElement(endlessIngredientContext);
+    addEndlessElement(endlessTagsContext);
+
+    function getEndlessArray(context) {
+        let res = [];
+        for (let i = 0; i < context.count - 1; i++) {
+            let text = context.array[i].value;
+            if (text.length > 0)
+                res.push(text);
+        }
+        return res;
+    }
+
+    function buttonClicked() {
+        let obj = {
+            Title: document.getElementById("inputTitle").value,
+            Text: document.getElementById("inputDes").value,
+            Portion: parseInt(document.getElementById("inputPor").value),
+            PrepareTime: parseInt(document.getElementById("inputPre").value),
+            Steps: getEndlessArray(endlessStepContext),
+            Ingredients: getEndlessArray(endlessIngredientContext),
+            Tags: getEndlessArray(endlessTagsContext)
+        };
+
+        httpRequest("POST", "/api/recipe/create", obj, function (response) {
+            successBox(response);
+        });
+    }
+
+</script>
