@@ -10,5 +10,9 @@
   {
     "text": "My Recipes",
     "href": "/myRecipes"
+  },
+  {
+    "text": "Logout",
+    "href": "/logout"
   }
 ]

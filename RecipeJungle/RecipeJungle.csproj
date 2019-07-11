@@ -11,5 +11,15 @@
 
   <ItemGroup>
     <None Remove="Entities\UserRecipe.css" />
+    <None Remove="Pages\EmptyHTMLFile.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Pages\LOginn.cshtml" />
+    <Content Remove="Pages\Loginnn.cshtml" />
+    <Content Remove="Pages\Core\UpdateRecipe.cshtml" />
+    <Content Remove="Pages\Core\UpdateRecipe.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Pages\RecipePageModel.cs" />
   </ItemGroup>
 </Project>
