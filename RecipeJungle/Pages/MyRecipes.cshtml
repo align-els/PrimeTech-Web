@@ -1,0 +1,64 @@
+﻿@page
+@model RecipeJungle.Pages.MyRecipesModel
+@{
+    Model.ActiveNavigation = "My Recipes";
+    Layout = "~/Pages/Core/Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col"></th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Prepare Time</th>
+                        <th scope="col">Portion</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        @foreach (var recipe in Model.recipes)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td scope="row">@recipe.Photos[0]</td>
+                                <td>@recipe.Title</td>
+                                <td>@recipe.PrepareTime</td>
+                                <td>@recipe.Portion</td>
+                                <td>
+                                    <button type="button" onclick="editClicked(@recipe.Id)" class="btn btn-primary">Edit</button>
+                                    <button type="button" onclick="removeClicked(@recipe.Id)" class="btn btn-danger">Remove</button>
+                                </td>    
+                            </tr>
+                            i+=1;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    
+        
+<script>
+    setTimeout(function () {
+        confirmBox();
+    }, 200);
+
+    function editClicked(id){
+        window.location.href = '/updateRecipe' + '?=' + id;
+    }
+
+    function removeClicked(id) {
+        confirmBox("text", function () {
+            httpRequest("POST", "/api/recipe/delete", id, function (response) {
+                successBox(response);
+        });
+        });
+    }
+ </script>

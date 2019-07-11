@@ -34,6 +34,18 @@ function infoBox(text, onClick) {
     });
 }
 
+function confirmBox(text, onClick) {
+    Swal.fire({
+        allowOutsideClick: false,
+        title: 'Are You Sure?',
+        text: text,
+        type: 'question',
+    }).then((result) => {
+        if (onClick != null && result)
+            onClick();
+    });
+}
+
 function httpRequest(method, url, bodyObj, onSuccess) {
     //if (objectsToDisable != null) {
     //    for (let x in objectsToDisable) {

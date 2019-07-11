@@ -20,7 +20,7 @@ namespace RecipeJungle.Pages
 
         public void OnGet(int Id)
         {
-            //Recipe = _recipeService.GetReceiveById(Id);
+            Recipe = _recipeService.GetReceiveById(Id);
         }
     }
 }
