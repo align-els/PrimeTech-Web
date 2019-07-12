@@ -112,9 +112,32 @@
         context.array[context.count - 1].setAttribute("data-index", context.count - 1);
     }
 
-    addEndlessElement(endlessStepContext);
-    addEndlessElement(endlessIngredientContext);
-    addEndlessElement(endlessTagsContext);
+    @{
+        var steps = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(Model.Recipe.Steps);
+        var ingredients = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(Model.Recipe.Ingredients);
+    }
+
+    let x = @steps.Length;
+    let y = @ingredients.Length;
+
+    for (let i = 0; i < @steps.Length; i++)
+        addEndlessElement(endlessStepContext);
+    for (let i = 0; i < @ingredients.Length; i++)
+         addEndlessElement(endlessIngredientContext);
+    for (let i = 0; i < 10; i++)
+        addEndlessElement(endlessTagsContext);
+
+    for (let i = 0; i < endlessStepContext.count; i++) {
+        endlessStepContext.array[i].innerText = "dsadsa";
+    }
+
+    for (let i = 0; i < endlessIngredientContext.count; i++) {
+        endlessIngredientContext.array[i].innerText = "dsadsa";
+    }
+
+    for (let i = 0; i < endlessTagsContext.count; i++) {
+        endlessTagsContext.array[i].innerText = "dsadsa";
+    }
 
     function getEndlessArray(context) {
         let res = [];

@@ -11,18 +11,19 @@ namespace RecipeJungle.Pages
 {
     public class MyRecipesModel : RecipePageModel
     {
-        public IRecipeService _recipeService;
-        public Recipe Recipe;
-        public List<Recipe> recipes;
+        public IUserService _userService;
+        public User user;
+        public List<Recipe> myRecipes;
 
-        public MyRecipesModel(IRecipeService recipeService)
+        public MyRecipesModel(IUserService userService)
         {
-            _recipeService = recipeService;
+            _userService = userService;
         }
             
         public void OnGet()
         {
-             recipes = _recipeService.ListRecipes();
+            user= _userService.FindByUserName("aaa");
+            myRecipes= _userService.ListMyRecipes(user);
         }
     }
 }
