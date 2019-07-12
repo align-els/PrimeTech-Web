@@ -40,6 +40,7 @@ function confirmBox(text, onClick) {
         title: 'Are You Sure?',
         text: text,
         type: 'question',
+        showCancelButton: true
     }).then((result) => {
         if (onClick != null && result)
             onClick();
