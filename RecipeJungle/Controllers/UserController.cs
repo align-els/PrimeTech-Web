@@ -47,7 +47,7 @@ namespace RecipeJungle.Controllers
         public IActionResult Register([FromBody] CreateUserRequest request)
         {
             userService.CreateUser(request);
-            return ActionUtils.Success();
+            return ActionUtils.Success("Register success");
         }
        
         [HttpPost("update")]

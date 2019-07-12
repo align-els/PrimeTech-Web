@@ -34,6 +34,18 @@ function infoBox(text, onClick) {
     });
 }
 
+function confirmBox(text, onClick) {
+    Swal.fire({
+        allowOutsideClick: false,
+        title: 'Are You Sure?',
+        text: text,
+        type: 'question',
+    }).then((result) => {
+        if (onClick != null && result)
+            onClick();
+    });
+}
+
 function httpRequest(method, url, bodyObj, onSuccess) {
     //if (objectsToDisable != null) {
     //    for (let x in objectsToDisable) {
@@ -46,7 +58,7 @@ function httpRequest(method, url, bodyObj, onSuccess) {
     let xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", getCookie("username"));
+    xhr.setRequestHeader("Authorization", getCookie("auth"));
     xhr.onreadystatechange = function () {
         if (xhr.readyState != 4)
             return;

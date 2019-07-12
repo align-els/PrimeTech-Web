@@ -11,7 +11,7 @@ namespace RecipeJungle.Pages
     {
         public IActionResult OnGet()
         {
-            return Redirect("/home");
+            return Redirect("/login");
         }
     }
 }
