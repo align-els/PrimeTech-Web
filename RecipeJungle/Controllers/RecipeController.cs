@@ -36,10 +36,10 @@ namespace RecipeJungle.Controllers
         }
         
         [HttpDelete("delete")]
-        public IActionResult Delete(int id, User user)
+        public IActionResult Delete(int id, [FromHeader] User user)
         {
             recipeService.DeleteRecipe(id,user);
-            return ActionUtils.Success();
+            return ActionUtils.Success("Delete success");
         }
 
         [HttpGet("listWithLabels")] 
