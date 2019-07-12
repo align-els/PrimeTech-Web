@@ -13,6 +13,7 @@ using RecipeJungle.Contexts;
 using RecipeJungle.Helpers;
 using RecipeJungle.Middlewares;
 using RecipeJungle.Services;
+using Tasky.Infrastructure;
 
 namespace RecipeJungle
 {
@@ -36,6 +37,7 @@ namespace RecipeJungle
                 opt.UseInMemoryDatabase("test")
             );
             services.AddCors();
+            services.AddScoped<RecipePageFilter>();
             services.AddMvc();
             services.AddOptions();
 

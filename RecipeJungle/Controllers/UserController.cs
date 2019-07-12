@@ -21,7 +21,6 @@ namespace RecipeJungle.Controllers
 {
     [Authorize]
     [ApiController]
-    [UserFilter]
     [Route("/api/account")]
     public class UsersController : ControllerBase
     {
@@ -51,12 +50,14 @@ namespace RecipeJungle.Controllers
         }
        
         [HttpPost("update")]
+        [UserFilter]
         public IActionResult Update([FromBody] CreateUserRequest request, [FromHeader] User user)
         {
             return ActionUtils.Success(userService.UpdateUser(request, user));
         }
 
         [HttpDelete("delete")]
+        [UserFilter]
         public IActionResult Delete(User user)
         {
             userService.Delete(user);
@@ -64,6 +65,7 @@ namespace RecipeJungle.Controllers
         }
 
         [HttpGet("list")]
+        [UserFilter]
         public IActionResult ListMyRecipes([FromHeader] User user)
         {
             return ActionUtils.Success(userService.ListMyRecipes(user));

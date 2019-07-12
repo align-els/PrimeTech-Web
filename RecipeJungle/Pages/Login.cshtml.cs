@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RecipeJungle.Pages
 {
-    public class LoginModel : RecipePageModel
+    public class LoginModel : PageModel
     {
         public void OnGet()
         {
+
         }
     }
 }

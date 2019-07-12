@@ -34,21 +34,7 @@ namespace RecipeJungle.Services
             if (user == null)
                 throw new ActionFailedException("User is not found!");
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.ToBeOrNotToBe);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Username)
-
-                }),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
-
+            user.Token = Convert.ToBase64String(BitConverter.GetBytes(user.Email.GetHashCode()));
 
             if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
                 throw new ActionFailedException("Wrong Password!");
@@ -185,6 +171,12 @@ namespace RecipeJungle.Services
                  .Include(x => x.RecipeTags)
                      .ThenInclude(x => x.Tag)
                  .Where(x=>x.User.Id==user.Id).ToList();
+        }
+
+        public User FindByToken(string token)
+        {
+            int hashcode = BitConverter.ToInt32(Convert.FromBase64String(token));
+            return userContext.Users.FirstOrDefault(x => x.Username.GetHashCode() == hashcode);
         }
     }
 }

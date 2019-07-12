@@ -21,14 +21,29 @@ namespace RecipeJungle.Filters
             if (!context.ActionArguments.ContainsKey("user"))
                 return;
 
-            object userParameter = context.ActionArguments["user"];
+            string authHeader = context.HttpContext.Request.Headers["Authorization"];
+            if (string.IsNullOrWhiteSpace(authHeader))
+            {
+                context.Result = new ContentResult
+                {
+                    StatusCode = 401
+                };
+                return;
+            }
 
-            ControllerBase controller = (ControllerBase)context.Controller;
-            string username = controller.User.FindFirst(ClaimTypes.Name)?.Value;
+            var token = authHeader.Substring("Bearer ".Length);
+
             IServiceProvider serviceProvider = context.HttpContext.RequestServices.GetRequiredService<IServiceProvider>();
-
             IUserService userService = serviceProvider.GetRequiredService<IUserService>();
-            User user = userService.FindByUserName(username);
+            User user = userService.FindByToken(token);
+            if (user == null)
+            {
+                context.Result = new ContentResult
+                {
+                    StatusCode = 401
+                };
+                return;
+            }
 
             context.ActionArguments["user"] = user;
         }

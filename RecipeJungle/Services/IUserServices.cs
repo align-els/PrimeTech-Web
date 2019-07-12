@@ -13,5 +13,6 @@ namespace RecipeJungle.Services
         User FindByUserName(string username);
         User UpdateUser(CreateUserRequest request,User user);
         List<Recipe> ListMyRecipes(User user);
+        User FindByToken(string token);
     }
 }
