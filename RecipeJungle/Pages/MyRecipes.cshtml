@@ -24,17 +24,19 @@
                         int i = 1;
                         @foreach (var recipe in Model.recipes)
                         {
-                            <tr>
-                                <td>@i</td>
-                                <td scope="row">@recipe.Photos[0]</td>
-                                <td>@recipe.Title</td>
-                                <td>@recipe.PrepareTime</td>
-                                <td>@recipe.Portion</td>
-                                <td>
-                                    <button type="button" onclick="editClicked(@recipe.Id)" class="btn btn-primary">Edit</button>
-                                    <button type="button" onclick="removeClicked(@recipe.Id)" class="btn btn-danger">Remove</button>
-                                </td>    
-                            </tr>
+                    <tr>
+                        <td>@i</td>
+                        @if(recipe.Photos!=null){ 
+                            <td scope="row"></td>
+                        }
+                        <td>@recipe.Title</td>
+                        <td>@recipe.PrepareTime</td>
+                        <td>@recipe.Portion</td>
+                        <td>
+                            <button type="button" onclick="editClicked(@recipe.Id)" class="btn btn-primary">Edit</button>
+                            <button type="button" onclick="remove(@recipe.Id)" class="btn btn-danger">Remove</button>
+                        </td>
+                    </tr>
                             i+=1;
                         }
                     }
@@ -46,19 +48,21 @@
     
         
 <script>
-    setTimeout(function () {
-        confirmBox();
-    }, 200);
-
+    
     function editClicked(id){
         window.location.href = '/updateRecipe' + '?=' + id;
     }
 
-    function removeClicked(id) {
-        confirmBox("text", function () {
-            httpRequest("POST", "/api/recipe/delete", id, function (response) {
+   
+    function remove(id) {
+        confirmBox("are ypu sure", function () {
+            httpRequest("DELETE", "/api/recipe/delete?id=" + id, null, function (response) {
+                if (response) {
+                    location.reload();
+                }
                 successBox(response);
+            });
         });
-        });
+        
     }
  </script>
