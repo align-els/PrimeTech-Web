@@ -1,0 +1,10 @@
+﻿@page
+@model RecipeJungle.Pages.LogoutModel;
+@{
+    Model.ActiveNavigation = "Logout";
+    Layout = null;
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script src="/js/utils.js"></script>
+<script type="text/javascript">setCookie("auth", null);
+    window.location = window.location = "/login";</script>
