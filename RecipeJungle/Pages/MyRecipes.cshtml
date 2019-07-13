@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model RecipeJungle.Pages.MyRecipesModel
 @{
     Model.ActiveNavigation = "My Recipes";
@@ -22,7 +22,7 @@
                 <tbody>
                     @{
                         int i = 1;
-                        @foreach (var recipe in Model.recipes)
+                        @foreach (var recipe in Model.myRecipes)
                         {
                     <tr>
                         <td>@i</td>
@@ -35,6 +35,8 @@
                         <td>
                             <button type="button" onclick="editClicked(@recipe.Id)" class="btn btn-primary">Edit</button>
                             <button type="button" onclick="remove(@recipe.Id)" class="btn btn-danger">Remove</button>
+                            <button type="button" class="btn btn-info">Details</button>
+
                         </td>
                     </tr>
                             i+=1;
@@ -55,7 +57,7 @@
 
    
     function remove(id) {
-        confirmBox("are ypu sure", function () {
+        confirmBox("Are You Sure?", function () {
             httpRequest("DELETE", "/api/recipe/delete?id=" + id, null, function (response) {
                 if (response) {
                     location.reload();

@@ -58,7 +58,7 @@ namespace RecipeJungle.Controllers
         {
             return ActionUtils.Success(recipeService.GlobalSearch(query));
         }
-        [HttpGet("get")]
+        [HttpGet("recipe")]
         public IActionResult GetRecipe(int id)
         {
             return ActionUtils.Success(recipeService.GetReceiveById(id));

@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model RecipeJungle.Pages.HomeModel
 @{
     Model.ActiveNavigation = "Home";
@@ -36,7 +36,9 @@
                                     <div class="single-best-receipe-area mb-30">
                                         <img src=@recipe.Photos.Take(1) alt=""> 
                                         <div class="receipe-content">
-                                            <a href="/receipe?id=@recipe.Id">
+
+                                            <a href="/recipePost?id=@recipe.Id">
+
                                                 <h5>@recipe.Title</h5>
                                                 
                                             </a>
