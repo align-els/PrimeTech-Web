@@ -11,19 +11,24 @@ namespace RecipeJungle.Pages
 {
     public class RecipeDetailsModel : RecipePageModel
     {
-        public IRecipeService _recipeService;
+        public IRecipeService recipeService;
         public Recipe Recipe;
         public bool IsOwnPost;
-       
+        public int LikeCount;
+        public bool UserLiked;
+
         public RecipeDetailsModel(IRecipeService recipeService)
         {
-            _recipeService = recipeService;
+            this.recipeService = recipeService;
         }
 
-        public void OnGet(int Id)
+        public void OnGet(int id)
         {
-            Recipe = _recipeService.GetReceiveById(Id);
+            Recipe = recipeService.GetReceiveById(id);
             IsOwnPost = Recipe.User.Id == GetCurrentUser().Id;
+
+            UserLiked = recipeService.IsUserLiked(id, GetCurrentUser().Id);
+            LikeCount = recipeService.GetLikeCount(id);
         }
     }
 }

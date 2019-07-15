@@ -265,18 +265,21 @@ namespace RecipeJungle.Services
             return recipes;
         }
 
-        public void LikeRecipe(int id, User user)
+        public void LikeRecipe(int recipeId, User user)
         {
-            var recipe = recipeContext.Recipes.Find(id);
-            if (recipe == null)
-            {
-                throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
+            var recipe = recipeContext.Recipes.Include(x => x.RecipeLikes).FirstOrDefault(x => x.Id == recipeId);
+            if (recipe == null) return;
+
+            if (IsUserLiked(recipeId, user.Id)) {
+                var olds = recipe.RecipeLikes.Where(x => x.RecipeId == recipeId && x.UserId == user.Id).ToArray();
+                foreach (var item in olds)
+                    recipe.RecipeLikes.Remove(item);
+                recipeContext.SaveChanges();
+            } else {
+                UserRecipe ur = new UserRecipe { Recipe = recipe, User = user };
+                recipe.RecipeLikes.Add(ur);
+                recipeContext.SaveChanges();
             }
-            UserRecipe ur = new UserRecipe { Recipe = recipe, User = user };
-            user.LikedRecipesOfUser.Add(ur);
-            recipeContext.SaveChanges();
-
-
         }
         public List<Recipe> GlobalSearch(string query) {
             return SearchByQueryAndUser(query, null);
@@ -323,6 +326,20 @@ namespace RecipeJungle.Services
                  .Include(x => x.RecipeTags)
                      .ThenInclude(x => x.Tag)
                  .Where(x => x.User.Id == user.Id).ToList();
+        }
+
+        public bool IsUserLiked(int recipeId, int userId) {
+            var recipe = recipeContext.Recipes.Include(x => x.RecipeLikes).FirstOrDefault(x => x.Id == recipeId);
+            if (recipe == null)
+                return false;
+            return recipe.RecipeLikes.Any(x => x.UserId == userId);
+        }
+
+        public int GetLikeCount(int id) {
+            var recipe = recipeContext.Recipes.Include(x => x.RecipeLikes).FirstOrDefault(x => x.Id == id);
+            if (recipe == null)
+                return 0;
+            return recipe.RecipeLikes.Count();
         }
     }
 } 

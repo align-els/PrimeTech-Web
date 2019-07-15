@@ -42,11 +42,14 @@
             <div class="col-12 col-md-4">
                 <div class="receipe-ratings text-right my-5">
                     <div class="ratings">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <a href="#" onclick="likeClicked()">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            @if (Model.UserLiked) {
+                                <strong>@Model.LikeCount likes</strong>
+                            } else {
+                                <text>@Model.LikeCount likes</text>
+                            }
+                        </a>
                     </div>
                     <a href="#" onclick="shareClicked()" class="btn delicious-btn"> Share </a>
                     @if (Model.IsOwnPost) {
@@ -72,7 +75,7 @@
                     }
 
                 }
-               <p>Tags: @string.Join(", ", Model._recipeService.GetTagsOfRecipe(Model.Recipe))</p>
+               <p>Tags: @string.Join(", ", Model.recipeService.GetTagsOfRecipe(Model.Recipe))</p>
             </div>
 
             @{
@@ -107,6 +110,11 @@
                     window.location = "/myRecipes";
                 });
             });
+        });
+    }
+    function likeClicked() {
+        httpRequest("POST", "/api/recipe/like?id=" + @Model.Recipe.Id, null, function (response) {
+            window.location = window.location;
         });
     }
 </script>

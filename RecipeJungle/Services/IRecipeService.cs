@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RecipeJungle.Entities;
 using RecipeJungle.Wrappers;
 
@@ -15,5 +15,7 @@ namespace RecipeJungle.Services {
         string[] GetTagsOfRecipe(Recipe recipe);
         List<Recipe> ListMyRecipes(User user);
         List<Recipe> SearchByQueryAndUser(string search, User user);
+        bool IsUserLiked(int id, int ıd);
+        int GetLikeCount(int id);
     }
 }
