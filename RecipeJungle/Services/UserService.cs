@@ -164,15 +164,6 @@ namespace RecipeJungle.Services
             return true;
         }
 
-        public List<Recipe> ListMyRecipes(User user)
-        {
-            return userContext.Recipes
-                 .Include(x => x.Photos)
-                 .Include(x => x.RecipeTags)
-                     .ThenInclude(x => x.Tag)
-                 .Where(x=>x.User.Id==user.Id).ToList();
-        }
-
         public User FindByToken(string token)
         {
             int hashcode = BitConverter.ToInt32(Convert.FromBase64String(token));

@@ -7,16 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using RecipeJungle.Entities;
 using RecipeJungle.Services;
 
-
 namespace RecipeJungle.Pages
 {
-    public class RecipePostModel : RecipePageModel
+    public class RecipeDetailsModel : RecipePageModel
     {
         public IRecipeService _recipeService;
         public Recipe Recipe;
+        public bool IsOwnPost;
        
-
-        public RecipePostModel(IRecipeService recipeService)
+        public RecipeDetailsModel(IRecipeService recipeService)
         {
             _recipeService = recipeService;
         }
@@ -24,6 +23,7 @@ namespace RecipeJungle.Pages
         public void OnGet(int Id)
         {
             Recipe = _recipeService.GetReceiveById(Id);
+            IsOwnPost = Recipe.User.Id == GetCurrentUser().Id;
         }
     }
 }

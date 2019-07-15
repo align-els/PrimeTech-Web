@@ -11,19 +11,30 @@ namespace RecipeJungle.Pages
 {
     public class MyRecipesModel : RecipePageModel
     {
-        public IUserService _userService;
+        public IUserService userService;
+        public IRecipeService recipeService;
         public User user;
         public List<Recipe> myRecipes;
+        public string searchText;
 
-        public MyRecipesModel(IUserService userService)
+        public MyRecipesModel(IUserService userService, IRecipeService recipeService)
         {
-            _userService = userService;
+            this.userService = userService;
+            this.recipeService = recipeService;
         }
             
-        public void OnGet()
+        public void OnGet(string search)
         {
-            user= _userService.FindByUserName("aaa");
-            myRecipes= _userService.ListMyRecipes(user);
+            if (search != null)
+                search = search.Trim();
+
+            if (string.IsNullOrWhiteSpace(search))
+                search = null;
+
+            searchText = search ?? "";
+
+            user = userService.FindByUserName("aaa");
+            myRecipes = recipeService.SearchByQueryAndUser(search, GetCurrentUser());
         }
     }
 }

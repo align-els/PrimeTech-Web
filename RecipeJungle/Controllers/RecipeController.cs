@@ -8,7 +8,6 @@ using RecipeJungle.Wrappers;
 
 namespace RecipeJungle.Controllers
 {
-    [Authorize]
     [UserFilter]
     [Route("/api/recipe")]
     public class RecipeController : ControllerBase {
@@ -21,7 +20,7 @@ namespace RecipeJungle.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] CreateRecipeRequest request,[FromHeader] User user) {
             recipeService.CreateRecipe(request,user);
-            return ActionUtils.Success();
+            return ActionUtils.Success("Recipe has been created");
         }
 
         [HttpGet("list")]
@@ -32,7 +31,7 @@ namespace RecipeJungle.Controllers
         [HttpPost("update")]
         public IActionResult Update([FromBody] UpdateRecipeRequest request,[FromHeader] User user) {
             recipeService.UpdateRecipes(request);
-            return ActionUtils.Success();
+            return ActionUtils.Success("Recipe has been updated");
         }
         
         [HttpDelete("delete")]
@@ -62,6 +61,10 @@ namespace RecipeJungle.Controllers
         public IActionResult GetRecipe(int id)
         {
             return ActionUtils.Success(recipeService.GetReceiveById(id));
+        }
+        [HttpGet("list")]
+        public IActionResult ListMyRecipes([FromHeader] User user) {
+            return ActionUtils.Success(recipeService.ListMyRecipes(user));
         }
     }
 }

@@ -72,6 +72,8 @@ namespace RecipeJungle.Services
             recipe.User = user; 
             recipe.Photos = new List<Photo>();
             recipe.RecipeTags = new List<RecipeTag>();
+            recipeContext.Recipes.Add(recipe);
+            recipeContext.SaveChanges();
 
             foreach (var item in request.Photos) {
                 Photo photo = recipeContext.Photos.Find(item);
@@ -90,15 +92,17 @@ namespace RecipeJungle.Services
                     tag = new Tag();
                     tag.Text = tagText;
                     recipeContext.Tags.Add(tag);
+                    recipeContext.SaveChanges();
                 }
 
                 recipe.RecipeTags.Add(new RecipeTag {
                     Recipe = recipe,
-                    Tag = tag
+                    Tag = tag,
+                    RecipeId = recipe.Id,
+                    TagId = tag.Id
                 });
             }
 
-            recipeContext.Recipes.Add(recipe);
             recipeContext.SaveChanges();
         }
 
@@ -274,22 +278,51 @@ namespace RecipeJungle.Services
 
 
         }
-        public List<Recipe> GlobalSearch(string query){
-            var recipes = recipeContext.Recipes.Where(x => x.Text.Contains(query) || x.Title.Contains(query)).ToList();
-            return recipes;
+        public List<Recipe> GlobalSearch(string query) {
+            return SearchByQueryAndUser(query, null);
+        }
+
+        public List<Recipe> SearchByQueryAndUser(string search, User user) {
+            var allRecipes = recipeContext.Recipes
+                .Include(x => x.User)
+                .Include(x => x.RecipeTags)
+                .ToList();
+            var allTags = recipeContext.Tags.ToDictionary(x => x.Id);
+            if (user != null) {
+                allRecipes = allRecipes.Where(x => x.User.Id == user.Id).ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(search)) {
+                search = search.Trim();
+                allRecipes = allRecipes.Where(
+                    x => (x.Title.Contains(search)) || (x.Text.Contains(search))
+                    || (x.Ingredients.Contains(search)) || (x.Steps.Contains(search))
+                    || (x.RecipeTags.Any(y => allTags[y.TagId].Text.Contains(search)))
+                    ).ToList();
+            }
+            return allRecipes;
         }
 
         public Recipe GetReceiveById(int id)
         {
             var recipe = recipeContext.Recipes.Find(id);
             if (recipe == null)
-            {
                 throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
-            }
             return recipe;
         }
 
+        public string[] GetTagsOfRecipe(Recipe recipe) {
+            int[] tagIds = recipeContext.Recipes
+                .Include(x => x.RecipeTags)
+                .FirstOrDefault(x => x.Id == recipe.Id).RecipeTags.Select(x => x.TagId).ToArray();
+            return tagIds.Select(x => recipeContext.Tags.Find(x).Text).ToArray();
+        }
 
-
+        public List<Recipe> ListMyRecipes(User user) {
+            return recipeContext.Recipes
+                 .Include(x => x.Photos)
+                 .Include(x => x.RecipeTags)
+                     .ThenInclude(x => x.Tag)
+                 .Where(x => x.User.Id == user.Id).ToList();
+        }
     }
 } 

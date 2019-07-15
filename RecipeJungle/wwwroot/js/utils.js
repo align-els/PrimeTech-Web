@@ -42,6 +42,7 @@ function confirmBox(text, onClick) {
         type: 'question',
         showCancelButton: true
     }).then((result) => {
+        if (!result.value) return;
         if (onClick != null && result)
             onClick();
     });

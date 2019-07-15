@@ -136,7 +136,9 @@
         };
 
         httpRequest("POST", "/api/recipe/create", obj, function (response) {
-            successBox(response);
+            successBox(response, function () {
+                window.location = "/myRecipes"
+            });
         });
     }
 

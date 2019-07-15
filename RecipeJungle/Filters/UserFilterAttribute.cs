@@ -31,7 +31,7 @@ namespace RecipeJungle.Filters
                 return;
             }
 
-            var token = authHeader.Substring("Bearer ".Length);
+            var token = authHeader;
 
             IServiceProvider serviceProvider = context.HttpContext.RequestServices.GetRequiredService<IServiceProvider>();
             IUserService userService = serviceProvider.GetRequiredService<IUserService>();

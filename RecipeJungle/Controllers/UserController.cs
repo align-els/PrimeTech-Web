@@ -19,7 +19,6 @@ using System.Net.Http;
 
 namespace RecipeJungle.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("/api/account")]
     public class UsersController : ControllerBase
@@ -30,7 +29,6 @@ namespace RecipeJungle.Controllers
             this.userService = userService;
         }
 
-        [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]CreateUserRequest request)
         {
@@ -41,7 +39,6 @@ namespace RecipeJungle.Controllers
             return ActionUtils.Success(user.Token);
         }
 
-        [AllowAnonymous]
         [HttpPost("register")]
         public IActionResult Register([FromBody] CreateUserRequest request)
         {
@@ -63,12 +60,6 @@ namespace RecipeJungle.Controllers
             userService.Delete(user);
             return ActionUtils.Success();
         }
-
-        [HttpGet("list")]
-        [UserFilter]
-        public IActionResult ListMyRecipes([FromHeader] User user)
-        {
-            return ActionUtils.Success(userService.ListMyRecipes(user));
-        }
+       
     }
 }

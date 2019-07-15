@@ -1,19 +1,20 @@
 ﻿@page
 @model RecipeJungle.Pages.UpdateRecipeModel
 @{
-    Model.ActiveNavigation = "Update Recipe";
+    Model.ActiveNavigation = "My Recipes";
     Layout = "Core/Layout";
 }
 
 @Html.HiddenFor(Model=>Model.Recipe.Id, new {@id="InputId" })
-<h2>UpdateRecipe</h2>
 <div class="container">
+    <h3>Update Recipe</h3>
+    <br />
     <div class="row">
         <div class="col-12">
             <form>
                 <div class="form-group">
                     <label>Title</label>
-                    @Html.TextAreaFor(m=>m.Recipe.Title,2,30,new {@class="form-control",id= "inputTitle", placeholder="" })
+                    @Html.TextAreaFor(m => m.Recipe.Title, 2, 30, new { @class = "form-control", id = "inputTitle", placeholder = "" })
                 </div>
                 <div class="form-group">
                     <label>Description</label>
@@ -21,7 +22,7 @@
                 </div>
                 <div class="form-group">
                     <label>Portion</label>
-                    @Html.TextAreaFor(m => m.Recipe.Portion, 1, 30, new { @class = "form-control",@type="number", id = "inputPor", placeholder = "" })
+                    @Html.TextAreaFor(m => m.Recipe.Portion, 1, 30, new { @class = "form-control", @type = "number", id = "inputPor", placeholder = "" })
                 </div>
                 <div class="form-group">
                     <label>Prepare Time (min)</label>
@@ -115,28 +116,32 @@
     @{
         var steps = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(Model.Recipe.Steps);
         var ingredients = Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(Model.Recipe.Ingredients);
+        var tags = Model.GetTags();
     }
 
-    let x = @steps.Length;
-    let y = @ingredients.Length;
-
-    for (let i = 0; i < @steps.Length; i++)
+    for (let i = 0; i < @(steps.Length + 1); i++)
         addEndlessElement(endlessStepContext);
-    for (let i = 0; i < @ingredients.Length; i++)
+    for (let i = 0; i < @(ingredients.Length + 1); i++)
          addEndlessElement(endlessIngredientContext);
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < @(tags.Length + 1); i++)
         addEndlessElement(endlessTagsContext);
 
-    for (let i = 0; i < endlessStepContext.count; i++) {
-        endlessStepContext.array[i].innerText = "dsadsa";
+    @for (int i = 0; i < steps.Length; i++) {
+        <text>
+            endlessStepContext.array[@i].value = '@steps[i]';
+        </text>
     }
 
-    for (let i = 0; i < endlessIngredientContext.count; i++) {
-        endlessIngredientContext.array[i].innerText = "dsadsa";
+    @for (int i = 0; i < ingredients.Length; i++) {
+        <text>
+            endlessIngredientContext.array[@i].value = '@ingredients[i]';
+        </text>
     }
 
-    for (let i = 0; i < endlessTagsContext.count; i++) {
-        endlessTagsContext.array[i].innerText = "dsadsa";
+    @for (int i = 0; i < tags.Length; i++) {
+        <text>
+            endlessTagsContext.array[@i].value = '@tags[i]';
+        </text>
     }
 
     function getEndlessArray(context) {
@@ -161,7 +166,9 @@
         };
 
         httpRequest("POST", "/api/recipe/update", obj, function (response) {
-            successBox(response);
+            successBox(response, function () {
+                window.location = "/recipeDetails?id=@Model.Recipe.Id"
+            });
         });
     }
 </script>
