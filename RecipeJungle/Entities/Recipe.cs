@@ -14,7 +14,7 @@ namespace RecipeJungle.Entities {
         public List<UserRecipe> RecipeLikes { get; set; }
         public string Steps { get; set; }
         public string Ingredients { get; set; }
-        public List<Photo> Photos { get; set; }
+        public string Photos { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime ModifiedTime { get; set; }
         public int PrepareTime { get; set; }

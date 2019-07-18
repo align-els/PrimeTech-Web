@@ -11,9 +11,9 @@
     <div class="row">
         <div class="col-12">
             <div class="receipe-slider owl-carousel">
-                <img src="img/bg-img/bg5.jpg" alt="">
-                @*<img src="img/bg-img/bg5.jpg" alt="">
-                    <img src="img/bg-img/bg5.jpg" alt="">*@
+                @for (int ii = 0; ii < Newtonsoft.Json.JsonConvert.DeserializeObject<string[]>(Model.Recipe.Photos).Length; ii++) {
+                    <img src="/api/photo/get-at?recipeId=@Model.Recipe.Id&index=@ii" alt="">
+                }
             </div>
         </div>
     </div>

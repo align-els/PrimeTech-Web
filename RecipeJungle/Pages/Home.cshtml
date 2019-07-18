@@ -28,25 +28,18 @@
 
                     <div class="row">
                         @{
-
                             foreach (var recipe in Model.recipes)
                             {
-
                                 <div class="col-12 col-sm-6 col-lg-4">
                                     <div class="single-best-receipe-area mb-30">
-                                        <img src=@recipe.Photos.Take(1) alt=""> 
+                                        <img src='/api/photo/get?recipeId=@recipe.Id' alt=""> 
                                         <div class="receipe-content">
-
                                             <a href="/recipePost?id=@recipe.Id">
-
                                                 <h5>@recipe.Title</h5>
-                                                
                                             </a>
-
                                         </div>
                                     </div>
                                 </div>
-
                             }
                         }
                     </div>

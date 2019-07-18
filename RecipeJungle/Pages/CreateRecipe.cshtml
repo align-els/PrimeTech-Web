@@ -36,7 +36,7 @@
                 </div>
                 <div id="photosContainer" class="form-group">
                     <label>Photos</label>
-                    <input class="form-control" multiple="multiple" type="file" accept="image/x-png,image/gif,image/jpeg">
+                    <input id="file_input" class="form-control" multiple="multiple" type="file" accept="image/x-png,image/gif,image/jpeg">
                 </div>
 
                 <button type="button" onclick="buttonClicked()" class="btn btn-primary">Create</button>
@@ -124,7 +124,40 @@
         return res;
     }
 
+
+    var photoBase64 = []
+    var readyToUpload = 0
+
+
+
     function buttonClicked() {
+        let files = document.getElementById("file_input").files;
+
+        photoBase64 = []
+        readyToUpload = files.length;
+
+        for (let i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var arrayBuffer = this.result;
+                array = new Uint8Array(arrayBuffer);
+                photoBase64.push(Uint8ToBase64(array));
+                console.log(Uint8ToBase64(array));
+                console.log(array);
+                readyToUpload--;
+                if (readyToUpload <= 0)
+                    isReady();
+            }
+            reader.readAsArrayBuffer(files[i]);
+        }
+    }
+
+    function isReady() {
+        if (photoBase64.length == 0) {
+            errorBox("Please select at least photo");
+            return;
+        }
+
         let obj = {
             Title: document.getElementById("inputTitle").value,
             Text: document.getElementById("inputDes").value,
@@ -132,7 +165,8 @@
             PrepareTime: parseInt(document.getElementById("inputPre").value),
             Steps: getEndlessArray(endlessStepContext),
             Ingredients: getEndlessArray(endlessIngredientContext),
-            Tags: getEndlessArray(endlessTagsContext)
+            Tags: getEndlessArray(endlessTagsContext),
+            Photos: photoBase64
         };
 
         httpRequest("POST", "/api/recipe/create", obj, function (response) {

@@ -13,7 +13,7 @@ namespace RecipeJungle.Wrappers
         public string[] Tags { get; set; }
         public string[] Ingredients { get; set; }
         public string[] Steps { get; set; }
-        public List<int> Photos { get; set; }
+        public List<string> Photos { get; set; }
         public int PrepareTime { get; set; }
         public int Portion { get; set; }
     }

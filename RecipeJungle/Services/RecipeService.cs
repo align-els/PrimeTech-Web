@@ -55,9 +55,12 @@ namespace RecipeJungle.Services
             }
 
             if (request.Photos == null)
-                request.Photos = new List<int>();
+                request.Photos = new List<string>();
             if (request.Tags == null)
                 request.Tags = new string[0];
+
+            if (request.Photos.Count == 0)
+                throw new ActionFailedException("Select at least one image");
 
             Recipe recipe = new Recipe();
             recipe.Id = 0;
@@ -69,18 +72,11 @@ namespace RecipeJungle.Services
             recipe.ModifiedTime = DateTime.Now;
             recipe.Portion = request.Portion;
             recipe.PrepareTime = request.PrepareTime;
-            recipe.User = user; 
-            recipe.Photos = new List<Photo>();
+            recipe.User = user;
+            recipe.Photos = JsonConvert.SerializeObject(request.Photos);
             recipe.RecipeTags = new List<RecipeTag>();
             recipeContext.Recipes.Add(recipe);
             recipeContext.SaveChanges();
-
-            foreach (var item in request.Photos) {
-                Photo photo = recipeContext.Photos.Find(item);
-                if (photo == null)
-                    throw new ActionFailedException("photo not found");
-                recipe.Photos.Add(photo);
-            }
 
             foreach (var item in request.Tags) {
                 if (string.IsNullOrWhiteSpace(item))
@@ -108,7 +104,6 @@ namespace RecipeJungle.Services
 
         public List<Recipe> ListRecipes() {
             return recipeContext.Recipes
-                .Include(x => x.Photos)
                 .Include(x => x.RecipeTags)
                     .ThenInclude(x => x.Tag)
                 .ToList();
@@ -164,13 +159,10 @@ namespace RecipeJungle.Services
             if (recipe == null)
                 throw new ActionFailedException("invalid recipe");
 
-            if (request.Photos == null)
-                request.Photos = new int[0];
             if (request.Tags == null)
                 request.Tags = new string[0];
 
             recipe.RecipeTags.Clear();
-            recipe.Photos.Clear();
 
             recipe.Title =request.Title;
             recipe.Text =request.Text;
@@ -179,16 +171,9 @@ namespace RecipeJungle.Services
             recipe.ModifiedTime = DateTime.Now;
             recipe.Portion = request.Portion;
             recipe.PrepareTime = request.PrepareTime;
-            recipe.Photos = new List<Photo>();
+            if (request.Photos != null)
+                recipe.Photos = JsonConvert.SerializeObject(request.Photos);
             recipe.RecipeTags = new List<RecipeTag>();
-
-            foreach (var item in request.Photos)
-            {
-                Photo photo = recipeContext.Photos.Find(item);
-                if (photo == null)
-                    throw new ActionFailedException("photo not found");
-                recipe.Photos.Add(photo);
-            }
 
             foreach (var item in request.Tags)
             {
@@ -228,7 +213,6 @@ namespace RecipeJungle.Services
 
             if (recipe.RecipeTags.Count != 0 )
             {
-
                 List<Tag> tags = recipe.RecipeTags.Select(x => x.Tag).ToList();
 
                 foreach (Tag tag in tags)
@@ -238,13 +222,8 @@ namespace RecipeJungle.Services
                     if (recipes.Count == 0)
                         recipeContext.Tags.Remove(tag);
                 }
-
-
             }
-            if (recipe.Photos.Count != 0)
-            {
-                recipeContext.Photos.RemoveRange(recipe.Photos);
-            }
+           
             recipeContext.Recipes.Remove(recipe);
             recipeContext.SaveChanges();
         }
