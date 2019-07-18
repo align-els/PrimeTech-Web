@@ -286,7 +286,7 @@ namespace RecipeJungle.Services
 
         public Recipe GetReceiveById(int id)
         {
-            var recipe = recipeContext.Recipes.Find(id);
+            var recipe = recipeContext.Recipes.Include(x => x.User).FirstOrDefault(x => x.Id == id);
             if (recipe == null)
                 throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
             return recipe;
