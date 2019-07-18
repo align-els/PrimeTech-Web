@@ -154,7 +154,7 @@ namespace RecipeJungle.Services
                     throw new ActionFailedException("step items cannot be empty");
             }
 
-            Recipe recipe = recipeContext.Recipes.Include(x=>x.RecipeTags).Include(x=>x.Photos).FirstOrDefault(x => x.Id == request.Id);
+            Recipe recipe = recipeContext.Recipes.Include(x=>x.RecipeTags).FirstOrDefault(x => x.Id == request.Id);
 
             if (recipe == null)
                 throw new ActionFailedException("invalid recipe");
