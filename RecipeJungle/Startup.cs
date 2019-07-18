@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,6 +13,7 @@ using RecipeJungle.Helpers;
 using RecipeJungle.Middlewares;
 using RecipeJungle.Services;
 using Tasky.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace RecipeJungle
 {
@@ -34,7 +34,8 @@ namespace RecipeJungle
             services.AddMemoryCache();
 
             services.AddDbContext<RecipeContext>(opt =>
-                opt.UseInMemoryDatabase("test")
+                opt.UseInMemoryDatabase("Recipe")
+                //opt.UseSqlite("Data Source=database/dd.db;")
             );
             services.AddCors();
             services.AddScoped<RecipePageFilter>();
