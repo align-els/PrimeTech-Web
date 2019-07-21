@@ -205,7 +205,7 @@ namespace RecipeJungle.Services
         
         public void DeleteRecipe(int id, User user)
         {
-            var recipe = recipeContext.Recipes.Include(x => x.Photos).Include(x => x.RecipeTags).ThenInclude(x => x.Tag).FirstOrDefault(x => x.User == user && x.Id == id);
+            var recipe = recipeContext.Recipes.Include(x => x.RecipeTags).ThenInclude(x => x.Tag).FirstOrDefault(x => x.User == user && x.Id == id);
             if (recipe == null)
             {
                 throw new ActionFailedException("Recipe with ID=" + id.ToString() + "is not found.");
