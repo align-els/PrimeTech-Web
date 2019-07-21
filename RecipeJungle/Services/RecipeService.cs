@@ -301,7 +301,6 @@ namespace RecipeJungle.Services
 
         public List<Recipe> ListMyRecipes(User user) {
             return recipeContext.Recipes
-                 .Include(x => x.Photos)
                  .Include(x => x.RecipeTags)
                      .ThenInclude(x => x.Tag)
                  .Where(x => x.User.Id == user.Id).ToList();
