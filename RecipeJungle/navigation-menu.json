@@ -14,5 +14,9 @@
   {
     "text": "Logout",
     "href": "/logout"
+  },
+  {
+    "text": "Profile",
+    "href": "/profile"
   }
 ]

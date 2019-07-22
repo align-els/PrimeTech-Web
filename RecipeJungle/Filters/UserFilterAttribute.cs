@@ -35,7 +35,7 @@ namespace RecipeJungle.Filters
 
             IServiceProvider serviceProvider = context.HttpContext.RequestServices.GetRequiredService<IServiceProvider>();
             IUserService userService = serviceProvider.GetRequiredService<IUserService>();
-            User user = userService.FindByToken(token);
+            User user = userService.FindByUserName(token);
             if (user == null)
             {
                 context.Result = new ContentResult
@@ -48,5 +48,4 @@ namespace RecipeJungle.Filters
             context.ActionArguments["user"] = user;
         }
     }
-
 }

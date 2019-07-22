@@ -39,7 +39,7 @@ namespace Tasky.Infrastructure
 
             var token = authHeader;
 
-            User user = userService.FindByToken(token);
+            User user = userService.FindByUserName(token);
             if (user == null)
             {
                 context.Result = new RedirectResult("/login");

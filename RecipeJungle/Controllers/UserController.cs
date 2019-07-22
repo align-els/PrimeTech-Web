@@ -36,7 +36,7 @@ namespace RecipeJungle.Controllers
             if (user == null) 
                 throw new ActionFailedException("Username or password is incorrect!");
 
-            return ActionUtils.Success(user.Token);
+            return ActionUtils.Success(user.Username);
         }
 
         [HttpPost("register")]
@@ -60,6 +60,5 @@ namespace RecipeJungle.Controllers
             userService.Delete(user);
             return ActionUtils.Success();
         }
-       
     }
 }
