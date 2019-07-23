@@ -147,13 +147,17 @@
             }
             reader.readAsArrayBuffer(files[i]);
         }
+
+        if (files.length == 0) {
+            isReady();
+        }
     }
 
     function isReady() {
-        if (photoBase64.length == 0) {
-            errorBox("Please select at least photo");
-            return;
-        }
+        //if (photoBase64.length == 0) {
+        //    errorBox("Please select at least photo");
+        //    return;
+        //}
 
         let obj = {
             Title: document.getElementById("inputTitle").value,

@@ -34,7 +34,7 @@ namespace RecipeJungle.Controllers
             return ActionUtils.Success("Recipe has been updated");
         }
         
-        [HttpDelete("delete")]
+        [HttpGet("delete")]
         public IActionResult Delete(int id, [FromHeader] User user)
         {
             recipeService.DeleteRecipe(id,user);
@@ -62,7 +62,7 @@ namespace RecipeJungle.Controllers
         {
             return ActionUtils.Success(recipeService.GetReceiveById(id));
         }
-        [HttpGet("list")]
+        [HttpGet("list-my")]
         public IActionResult ListMyRecipes([FromHeader] User user) {
             return ActionUtils.Success(recipeService.ListMyRecipes(user));
         }
