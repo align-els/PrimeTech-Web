@@ -59,8 +59,8 @@ namespace RecipeJungle.Services
             if (request.Tags == null)
                 request.Tags = new string[0];
 
-            if (request.Photos.Count == 0)
-                throw new ActionFailedException("Select at least one image");
+            //if (request.Photos.Count == 0)
+            //    throw new ActionFailedException("Select at least one image");
 
             Recipe recipe = new Recipe();
             recipe.Id = 0;
