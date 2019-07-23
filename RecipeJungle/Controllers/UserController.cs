@@ -16,6 +16,8 @@ using RecipeJungle.Exceptions;
 using RecipeJungle.Filters;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using RecipeJungle.Contexts;
+using System.Linq;
 
 namespace RecipeJungle.Controllers
 {
@@ -24,9 +26,12 @@ namespace RecipeJungle.Controllers
     public class UsersController : ControllerBase
     {
         private IUserService userService;
-        public UsersController(IUserService userService)
+        private RecipeContext recipeContext;
+
+        public UsersController(IUserService userService, RecipeContext recipeContext)
         {
             this.userService = userService;
+            this.recipeContext = recipeContext;
         }
 
         [HttpPost("authenticate")]
@@ -58,6 +63,26 @@ namespace RecipeJungle.Controllers
         public IActionResult Delete(User user)
         {
             userService.Delete(user);
+            return ActionUtils.Success();
+        }
+
+        [HttpGet("changePref")]
+        [UserFilter]
+        public IActionResult ChangePref(int value, [FromHeader] User user)
+        {
+            var name = user.Username;
+            var v = recipeContext.Preferences.FirstOrDefault(x => x.Username == name);
+            if (v == null) {
+                recipeContext.Preferences.Add(new Preference {
+                    Username = name,
+                    Value = value
+                });
+                recipeContext.SaveChanges();
+                v = recipeContext.Preferences.FirstOrDefault(x => x.Username == name);
+            }
+            v.Value = value;
+            recipeContext.SaveChanges();
+
             return ActionUtils.Success();
         }
     }

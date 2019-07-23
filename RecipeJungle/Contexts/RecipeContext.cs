@@ -18,6 +18,7 @@ namespace RecipeJungle.Contexts
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Preference> Preferences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder mb) {
             mb.Entity<RecipeTag>().HasKey(x => new { x.RecipeId, x.TagId });
