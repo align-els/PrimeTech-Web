@@ -29,14 +29,14 @@ namespace RecipeJungle.Services
             request.Title = request.Title.Trim();
             request.Text = request.Text.Trim();
 
-            if (request.Title.Length < 8)
+            if (request.Title.Length < 4)
                 throw new ActionFailedException("title is too short");
-            if (request.Text.Length < 20)
+            if (request.Text.Length < 6)
                 throw new ActionFailedException("recipe details is too short");
 
             if (request.Portion <= 0)
                 throw new ActionFailedException("portion cannot be smaller than 1");
-            if (request.Portion > 20)
+            if (request.Portion > 200)
                 throw new ActionFailedException("portion is too large");
 
             if (request.PrepareTime <= 0)
