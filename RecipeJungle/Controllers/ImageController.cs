@@ -20,11 +20,14 @@ namespace RecipeJungle.Controllers
 
         [HttpGet("get")]
         public IActionResult GetPhoto(int recipeId) {
-            var recipe = recipeService.GetReceiveById(recipeId);
-            var photos = JsonConvert.DeserializeObject<string[]>(recipe.Photos);
-            var bytes = Convert.FromBase64String(photos[0]);
-
-            return File(bytes, "image/jpeg");
+            try {
+                var recipe = recipeService.GetReceiveById(recipeId);
+                var photos = JsonConvert.DeserializeObject<string[]>(recipe.Photos);
+                var bytes = Convert.FromBase64String(photos[0]);
+                return File(bytes, "image/jpeg");
+            } catch {
+                return Redirect("/photo_not_available.gif");
+            }
         }
 
         [HttpGet("get-at")]
