@@ -258,6 +258,9 @@ namespace RecipeJungle.Services
                 UserRecipe ur = new UserRecipe { Recipe = recipe, User = user };
                 recipe.RecipeLikes.Add(ur);
                 recipeContext.SaveChanges();
+
+                var obj = RecipeJungle.Controllers.UsersController.notifications;
+                obj[recipe.User.Username] = user.Username;
             }
         }
         public List<Recipe> GlobalSearch(string query) {

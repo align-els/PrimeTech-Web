@@ -28,6 +28,8 @@ namespace RecipeJungle.Controllers
         private IUserService userService;
         private RecipeContext recipeContext;
 
+        public static Dictionary<string, string> notifications = new Dictionary<string, string>();
+
         public UsersController(IUserService userService, RecipeContext recipeContext)
         {
             this.userService = userService;
@@ -84,6 +86,21 @@ namespace RecipeJungle.Controllers
             recipeContext.SaveChanges();
 
             return ActionUtils.Success();
+        }
+
+        [HttpGet("notifs")]
+        [UserFilter]
+        public IActionResult GetNotifications([FromHeader] User user)
+        {
+            lock (notifications) {
+                var name = user.Username;
+                if (notifications.ContainsKey(name)) {
+                    var text = notifications[name];
+                    notifications.Remove(name);
+                    return ActionUtils.Success(text);
+                } else
+                    return ActionUtils.Success();
+            }
         }
     }
 }
