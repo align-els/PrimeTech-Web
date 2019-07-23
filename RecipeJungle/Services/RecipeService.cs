@@ -246,7 +246,7 @@ namespace RecipeJungle.Services
 
         public void LikeRecipe(int recipeId, User user)
         {
-            var recipe = recipeContext.Recipes.Include(x => x.RecipeLikes).FirstOrDefault(x => x.Id == recipeId);
+            var recipe = recipeContext.Recipes.Include(x => x.RecipeLikes).Include(x => x.User).FirstOrDefault(x => x.Id == recipeId);
             if (recipe == null) return;
 
             if (IsUserLiked(recipeId, user.Id)) {
