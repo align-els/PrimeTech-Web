@@ -50,7 +50,7 @@ namespace RecipeJungle.Controllers
         public IActionResult Like(int id, [FromHeader] User user)
         {
             recipeService.LikeRecipe(id, user);
-            return ActionUtils.Success();
+            return ActionUtils.Success(recipeService.GetReceiveById(id));
         }
         [HttpGet("search")] 
         public IActionResult Search(string query)
