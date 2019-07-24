@@ -19,7 +19,7 @@ namespace RecipeJungle
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://127.0.0.1:5002/")
+                .UseUrls("http://127.0.0.1:5004/")
                 .UseStartup<Startup>();
     }
 }
