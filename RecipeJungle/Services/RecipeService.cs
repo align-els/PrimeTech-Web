@@ -106,6 +106,7 @@ namespace RecipeJungle.Services
             return recipeContext.Recipes
                 .Include(x => x.RecipeTags)
                     .ThenInclude(x => x.Tag)
+                .Include(x => x.RecipeLikes)
                 .ToList();
         }
 
@@ -306,6 +307,7 @@ namespace RecipeJungle.Services
             return recipeContext.Recipes
                  .Include(x => x.RecipeTags)
                      .ThenInclude(x => x.Tag)
+                 .Include(x => x.RecipeLikes)
                  .Where(x => x.User.Id == user.Id).ToList();
         }
 
